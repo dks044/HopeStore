@@ -1,0 +1,28 @@
+body {
+	font-family: 'Nanum Myeongjo', serif;
+	font-weight: bolder;
+}
+/*main페이지 시작*/
+#main_image{
+	background-image: url("https://cdn.pixabay.com/photo/2022/05/31/00/56/sky-7232494_1280.jpg");
+	background-size: cover;
+	padding-top: 100px
+}
+#main_text{
+	font-size: 100px;
+}
+.card{
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
+/*main페이지 끝*/
+/*회원가입 페이지 시작*/
+#signup_image{
+	background-image: url("https://cdn.pixabay.com/photo/2015/11/07/09/15/sunrise-1030593_1280.jpg");
+	background-size: cover;
+	padding-top: 100px
+}
+#signup_text{
+	font-size: 100px;
+}
+/*회원가입 페이지 끝*/
