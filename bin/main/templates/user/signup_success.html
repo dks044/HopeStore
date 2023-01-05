@@ -1,0 +1,22 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" >
+	<!-- 대문 시작 -->
+	<div id="signup_image" class="text-center" style="height: 400px; --bs-rows: 3; --bs-columns: 3;">
+		<div id="signup_text">
+			JOIN US
+		</div>
+	</div>
+	<!-- 대문 끝 -->
+	<div class="container my-6">
+		<div id="signup_success_box" class="row text-center">
+		    <div class="col">
+		      	<img id="signup_success_image" src="https://cdn.pixabay.com/photo/2021/01/30/12/19/couple-5963678_1280.png">
+		    </div>
+		    <div id="signup_success_box_section2" class="col">
+		      <h1>가입을 축하합니다!</h1>
+		      <h3>가입하신 계정으로 <a sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a> 하세요.</h3>
+		    </div>
+	    </div>
+	</div>
+</div>
+</html>

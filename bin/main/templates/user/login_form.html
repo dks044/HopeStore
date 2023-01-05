@@ -1,0 +1,38 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" >
+	<!-- 대문 시작 -->
+	<div id="login_image" class="text-center" style="height: 400px; --bs-rows: 3; --bs-columns: 3;">
+		<div id="login_text">
+			Login
+		</div>
+	</div>
+	<!-- 대문 끝 -->
+	<br>
+	<div class="container my-6">
+		<form th:action="@{/user/login}" method="post" style="text-align: center;">
+			<h1 style="text-align: center;">로그인</h1>
+			<div th:if="${param.error}">
+	            <div class="alert alert-danger">
+	                사용자ID 또는 비밀번호를 확인해 주세요.
+	            </div>
+        	</div>
+			<div class="row justify-content-md-center">
+			  <div class="col col-lg-6">
+			  	<label for="username" class="form-label">ID</label>
+			    <input name="username" id="username" type="text" class="form-control" placeholder="ID 입력">
+			  </div>
+			</div>
+			<br>
+			<div class="row justify-content-md-center">
+			  <div class="col col-lg-6">
+			  	<label for="username" class="form-label">비밀번호</label>
+			    <input type="password" name="password" id="password" class="form-control" placeholder="password 입력">
+			  </div>
+			</div>
+			<br>
+			<button type="submit" class="btn btn-dark">로그인</button>
+		</form>
+	</div>
+	<br>
+</div>
+</html>
