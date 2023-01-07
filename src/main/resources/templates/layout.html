@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    <!-- 폰트 (나눔명조)-->
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700&display=swap" rel="stylesheet">
+    <!-- fontawesome -->
+    <script src="https://kit.fontawesome.com/946dc76c2e.js" crossorigin="anonymous"></script>
+    <!-- CK Editor 5 -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
+    <title>Hope Store</title>
+</head>
+<body>
+<!-- 네비게이션바 -->
+<nav th:replace="~{navbar :: navbarFragment}"></nav>
+<!-- 기본 템플릿 안에 삽입될 내용 Start -->
+<th:block layout:fragment="content"></th:block>
+<!-- 기본 템플릿 안에 삽입될 내용 End -->
+<!-- footer -->
+<footer th:replace="~{footer :: footerFragment}"></footer>
+<!-- 카카오 API(우편번호 서비스) -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<!-- Bootstrap JS -->
+<script th:src="@{/bootstrap.min.js}"></script>
+<!-- 자바스크립트 Start -->
+<th:block layout:fragment="script"></th:block>
+<!-- 자바스크립트 End -->
+</body>
+</html>

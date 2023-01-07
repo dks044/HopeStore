@@ -1,0 +1,52 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.0.1'
+	id 'io.spring.dependency-management' version '1.1.0'
+}
+
+group = 'com.mysite'
+version = '0.0.1'
+sourceCompatibility = '17'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	
+	//스프링 디벨로프(바로 볼수있게)
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	//롬북
+	compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    
+    //데이터베이스 h2/
+    runtimeOnly 'com.h2database:h2'
+    
+    //jpa
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    
+    //타임리프템플릿 설치
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+    
+    //스프링시큐리티
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
+    
+    //마크다운 라이브러리 설치
+    implementation 'org.commonmark:commonmark:0.21.0'
+    //스프링부트가 내부적으로 관리하는 라이브러리에 포함되면 버전 정보가 필요없고 포함되지 않으면 버전 정보가 필요하다. 
+    //commonmark는 스프링부트가 내부적으로 관리하는 라이브러리가 아님.
+    
+    //파일업로드용
+    implementation 'commons-io:commons-io:2.11.0'    /* Apache commons-io */
+	implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4' /* Apache Commons FileUpload */
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
