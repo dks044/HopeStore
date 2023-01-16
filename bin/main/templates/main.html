@@ -1,0 +1,80 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" >
+	<!-- 대문 시작 -->
+	<div id="main_image" class="text-center" style="height: 400px; --bs-rows: 3; --bs-columns: 3;">
+		<div id="main_text">
+			Hope Store<br>
+			<a th:href="@{/item/itemList}" class="btn btn-outline-dark">더 둘러보기</a>
+		</div>
+	</div>
+	<!-- 대문 끝 -->
+	<br><br><br>
+	<!-- 상품 목록 시작 -->
+	<div class="container text-center">
+	  <!-- 최근등록된 상품들 시작 -->
+	  <h2>최근 등록된 상품들</h2>
+	  <hr>
+	  <br>
+	  <!-- 상품반복 시작 (최신순) -->
+	  <div class="row row-cols-1 row-cols-md-4 g-4">
+	  	  <!-- 3개만 표시되게 -->
+		  <div class="col" th:each="item,index : ${itemList_letest}" th:if="${index.index} < 3">
+		    <div id="item" class="card h-100">
+		    <img th:data-uri="@{|item/detail/${item.id}|}" th:src="@{${item.filepath}}" class="itemImg card-img-top" alt="...">
+		      <div class="card-body">
+		        <a th:href="@{|item/detail/${item.id}|}" class="card-title" th:text="${item.name}"></a>
+		        <p class="card-text" th:text="${item.text}"></p>
+		        <h5 class="card-text" th:text="${#numbers.formatInteger(item.price, 3, 'COMMA') + '원'}"></h5>
+		        <span th:if="${item.isSoldOut == 0 and item.stock > 0}" class="badge text-bg-success" th:text="판매중"></span>
+	      		<span th:if="${item.isSoldOut == 1 or item.stock == 0}" class="badge text-bg-danger" th:text="품절"></span>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="col">
+			<a id="moreItem_btn" th:href="@{/item/itemList}" class="btn btn-outline-dark">더 둘러보기</a>
+		  </div>
+  	  </div>
+	  <!-- 상품반복 끝 (최신순) -->
+	  <br>
+  	  <br>
+  	  <br>
+  	  <br>
+  	  <br>
+  	  <br>
+  	  <h2>가장 많이 조회한 상품들</h2>
+  	  <hr>
+  	  <br>
+  	  <!-- 상품반복 시작 (조회순) -->
+  	  <div class="row row-cols-1 row-cols-md-4 g-4">
+	  	  <!-- 3개만 표시되게 -->
+			  <div class="col" th:each="item,index : ${itemList_hit}" th:if="${index.index} < 3">
+			    <div id="item" class="card h-100">
+			    <img th:data-uri="@{|item/detail/${item.id}|}" th:src="@{${item.filepath}}" class="itemImg card-img-top" alt="...">
+			      <div class="card-body">
+			        <a th:href="@{|item/detail/${item.id}|}" class="card-title" th:text="${item.name}"></a>
+			        <p class="card-text" th:text="${item.text}"></p>
+			        <h5 class="card-text" th:text="${#numbers.formatInteger(item.price, 3, 'COMMA') + '원'}"></h5>
+			        <span th:if="${item.isSoldOut == 0 and item.stock > 0}" class="badge text-bg-success" th:text="판매중"></span>
+	      			<span th:if="${item.isSoldOut == 1 or item.stock == 0}" class="badge text-bg-danger" th:text="품절"></span>
+			      </div>
+			    </div>
+			  </div>
+			  <div class="col">
+				<a id="moreItem_btn" th:href="@{/item/itemList}" class="btn btn-outline-dark">더 둘러보기</a>
+			  </div>
+  	  </div>
+	  <!-- 상품반복 끝 (조회순) -->
+	</div>
+	<br>
+	<br>
+</div>
+<script layout:fragment="script" type='text/javascript'>
+/*상품이미지 클릭시 상품페이지 이동*/
+const itemImg = document.getElementsByClassName("itemImg");
+Array.from(itemImg).forEach(function(element){
+	element.addEventListener('click',function(){
+        location.href = this.dataset.uri;
+    });
+});
+</script>
+</html>

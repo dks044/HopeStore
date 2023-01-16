@@ -1,0 +1,127 @@
+body {
+	font-family: 'Nanum Myeongjo', serif;
+	font-weight: bolder;
+}
+/*nav 시작*/
+#navIcon{
+    animation: rotate_image 3s linear infinite;
+    transform-origin: 50% 50%;}
+#navbar{
+	transition: background-color 0.8s;
+}
+/*nav 끝*/
+/*main페이지 시작*/
+#main_image{
+	background-image: url("https://cdn.pixabay.com/photo/2022/05/31/00/56/sky-7232494_1280.jpg");
+	background-size: cover;
+	padding-top: 100px
+}
+#main_text{
+	font-size: 100px;
+}
+.card{
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
+#moreItem_btn{
+	margin-top: 200px;
+	width:150px;
+}
+.card-title{
+	text-decoration: none;
+	color:black;
+}
+.itemImg:hover {
+	cursor:pointer;
+}
+#item{
+	box-shadow: 3px 5px 5px black;
+	transition: all 1s;
+}
+#item:hover{
+	transform: translateY(10px);
+}
+/*main페이지 끝*/
+/*회원가입 페이지 시작*/
+#signup_image{
+	background-image: url("https://cdn.pixabay.com/photo/2015/11/07/09/15/sunrise-1030593_1280.jpg");
+	background-size: cover;
+	padding-top: 100px
+}
+#signup_text{
+	font-size: 100px;
+}
+/*회원가입 페이지 끝*/
+/*회원가입 성공페이지 시작*/
+#signup_success_box{
+	margin-top: 50px;
+	margin-bottom: 50px;
+}
+#signup_success_image{
+	width:400px;
+	height: 400px;
+}
+#signup_success_box_section2{
+	padding-top: 50px;
+}
+/*회원가입 성공페이지 끝*/
+/*로그인 페이지 시작*/
+#login_image{
+	background-image: url("https://cdn.pixabay.com/photo/2017/08/27/23/11/background-2687925_1280.jpg");
+	background-size: cover;
+	padding-top: 100px;
+}
+#login_text{
+	font-size: 100px;
+}
+/*로그인 페이지 끝*/
+/*상품 디테일 페이지 시작*/
+#itemDetail_section{
+	margin-top: 100px;
+	
+}
+#item_name{
+	font-weight: bolder;
+	font-size: 35px;
+}
+/*상품 디테일 페이지 끝*/
+/*상품리스트 페이지 시작*/
+#itemList_image{
+	background-image: url("https://cdn.pixabay.com/photo/2017/08/12/10/13/background-2633962_1280.jpg");
+	background-size: cover;
+	padding-top: 100px
+}
+#itemList_text{
+	font-size: 100px;
+}
+
+/*상품리스트 페이지 끝*/
+
+
+
+
+
+
+/*애니메이션*/
+/*아이콘 360도 회전*/
+@keyframes rotate_image{
+    100% {
+        transform: rotate(360deg);
+    }
+}
+@-moz-keyframes rotate_image{
+    100% {
+        transform: rotate(360deg);
+    }
+}
+@-webkit-keyframes rotate_image{
+    100% {
+        transform: rotate(360deg);
+    }
+}
+@-o-keyframes rotate_image{
+    100% {
+        transform: rotate(360deg);
+    }
+}
+/*애니메이션*/

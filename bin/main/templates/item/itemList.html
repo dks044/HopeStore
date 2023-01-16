@@ -1,0 +1,461 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" >
+	<!-- 대문 시작 -->
+	<div id="itemList_image" class="text-center" style="height: 400px; --bs-rows: 3; --bs-columns: 3;">
+		<div id="itemList_text">
+			Look around
+		</div>
+	</div>
+	<!-- 대문 끝 -->
+	<div class="container text-center">
+		<br>
+		<h2>현재 <span class="badge text-bg-light" th:text="|${#lists.size(item_list)}|"></span>개의 상품이 판매중 입니다.</h2>
+		<hr>
+		<br>
+		<button id="category_all" th:value="0" type="button" class="btn btn-outline-primary" onclick="getItemListAll()">전체보기</button>
+		<button id="category_top" th:value="1" type="button" class="btn btn-outline-dark" onclick="getItemListTop()">상의</button>
+		<button id="category_pants" th:value="2" type="button" class="btn btn-outline-dark" onclick="getItemListPants()">하의</button>
+		<button id="category_outer" th:value="3" type="button" class="btn btn-outline-dark" onclick="getItemListOuter()">아우터</button><br><br>
+		<button type="button" class="btn btn-outline-success" onclick="getItemListCategory_price()">가격순</button>
+		<!-- 나중에 주문순도 구현 -->
+		<button type="button" class="btn btn-outline-success">주문순</button>
+		<button type="button" class="btn btn-outline-success" onclick="getItemListCategory_createDate()">최신순</button>
+		<br>
+		<div class="row row-cols-1 row-cols-md-6 g-4 item_list_parent">
+ 			<div class="col item_list_child" th:each="item: ${item_list}">
+			 	<div id="item_list" class="card h-100">
+			 	<img th:data-uri="@{|item/detail/${item.id}|}" th:src="@{${item.filepath}}" class="itemImg card-img-top" alt="...">
+			   	<div class="card-body">
+			     	<a th:href="@{|item/detail/${item.id}|}" class="card-title" th:text="${item.name}"></a>
+			     	<p class="card-text" th:text="${item.text}"></p>
+			     	<h5 class="card-text" th:text="${#numbers.formatInteger(item.price, 3, 'COMMA') + '원'}"></h5>
+			     	<span th:if="${item.isSoldOut == 0 and item.stock > 0}" class="badge text-bg-success" th:text="판매중"></span>
+		     		<span th:if="${item.isSoldOut == 1 or item.stock == 0}" class="badge text-bg-danger" th:text="품절"></span>
+			   	</div>
+			 	</div>
+			</div>
+			<div class="test"></div> 
+	  	</div>
+	</div>
+<br>
+<br>
+<br>
+</div>
+<script layout:fragment="script" type='text/javascript'>
+/*상품이미지 클릭시 상품페이지 이동*/
+const itemImg = document.getElementsByClassName("itemImg");
+Array.from(itemImg).forEach(function(element){
+	element.addEventListener('click',function(){
+        location.href = this.dataset.uri;
+    });
+});
+/*상품이미지 클릭시 상품페이지 이동*/
+ 
+/*AJAX 카테고리별 조회 시작*/
+var category_id = null; //카테고리별
+console.log("현재 category_id=>"+category_id);
+var field = "createDate";  //가격순, 주문순, 최신순 (기본값 : 최신순)
+
+const category_top = document.getElementById("category_top")
+.addEventListener('click',function(){
+	category_id = document.getElementById("category_top").value;
+	console.log("카테고리 ID는 =>"+category_id);
+})
+const category_pants = document.getElementById("category_pants")
+.addEventListener('click',function(){
+	category_id = document.getElementById("category_pants").value;
+	console.log("카테고리 ID는 =>"+category_id);
+})
+
+const category_outer = document.getElementById("category_outer")
+.addEventListener('click',function(){
+	category_id = document.getElementById("category_outer").value;
+	console.log("카테고리 ID는 =>"+category_id);
+}) 
+const category_all = document.getElementById("category_all")
+.addEventListener('click',function(){
+	category_id = document.getElementById("category_all").value;
+	console.log("카테고리 ID는 =>"+category_id);
+}) 
+
+	
+	
+    function getItemListAll() {
+        $.ajax({
+            type: "POST",
+            url: "/item/search/all",
+            data: {
+            	
+            	field: "createDate"
+            },
+            dataType: "text",
+            beforeSend: function (jqXHR, settings) {//스프링 시큐리티가 ajax post 호출시 막아서 추가.
+                var header = $("meta[name='_csrf_header']").attr("content");
+                var token = $("meta[name='_csrf']").attr("content");
+                jqXHR.setRequestHeader(header, token);
+     	}
+        })
+            .done(function (result) {
+                console.log(result);
+                $(".item_list_child").remove();
+                $(".search_item").remove();
+                $(".test").after(result);
+                
+               
+            })
+            .fail(function(jqXHR) {//오류메시지
+                console.log(jqXHR);
+            })
+            .always(function() {
+                console.log("요청, 응답 결과에 상관없이, 이건 항상 실행");
+            })
+    }
+    function getItemListTop() {
+        $.ajax({
+            type: "POST",
+            url: "/item/search",
+            data: {
+            	category_id: "1",
+            	field: "createDate"
+            },
+            dataType: "text",
+            beforeSend: function (jqXHR, settings) {//스프링 시큐리티가 ajax post 호출시 막아서 추가.
+                var header = $("meta[name='_csrf_header']").attr("content");
+                var token = $("meta[name='_csrf']").attr("content");
+                jqXHR.setRequestHeader(header, token);
+     	}
+        })
+            .done(function (result) {
+                console.log(result);
+                $(".item_list_child").remove();
+                $(".search_item").remove();
+                $(".test").after(result);
+                
+               
+            })
+            .fail(function(jqXHR) {//오류메시지
+                console.log(jqXHR);
+            })
+            .always(function() {
+                console.log("요청, 응답 결과에 상관없이, 이건 항상 실행");
+            })
+    }
+    function getItemListPants() {
+        $.ajax({
+            type: "POST",
+            url: "/item/search",
+            data: {
+            	category_id: "2",
+            	field: "createDate"
+            },
+            dataType: "text",
+            beforeSend: function (jqXHR, settings) {//스프링 시큐리티가 ajax post 호출시 막아서 추가.
+                var header = $("meta[name='_csrf_header']").attr("content");
+                var token = $("meta[name='_csrf']").attr("content");
+                jqXHR.setRequestHeader(header, token);
+     	}
+        })
+            .done(function (result) {
+                console.log(result);
+                $(".item_list_child").remove();
+                $(".search_item").remove();
+                $(".test").after(result);
+                
+               
+            })
+            .fail(function(jqXHR) {//오류메시지
+                console.log(jqXHR);
+            })
+            .always(function() {
+                console.log("요청, 응답 결과에 상관없이, 이건 항상 실행");
+            })
+    }
+    function getItemListOuter() {
+        $.ajax({
+            type: "POST",
+            url: "/item/search",
+            data: {
+            	category_id: "3",
+            	field: "createDate"
+            },
+            dataType: "text",
+            beforeSend: function (jqXHR, settings) {//스프링 시큐리티가 ajax post 호출시 막아서 추가.
+                var header = $("meta[name='_csrf_header']").attr("content");
+                var token = $("meta[name='_csrf']").attr("content");
+                jqXHR.setRequestHeader(header, token);
+     	}
+        })
+            .done(function (result) {
+                console.log(result);
+                $(".item_list_child").remove();
+                $(".search_item").remove();
+                $(".test").after(result);
+                
+               
+            })
+            .fail(function(jqXHR) {//오류메시지
+                console.log(jqXHR);
+            })
+            .always(function() {
+                console.log("요청, 응답 결과에 상관없이, 이건 항상 실행");
+            })
+    }
+    
+    function getItemListCategory_price() {
+    	
+    	if(category_id == 0){//0=전체
+	        $.ajax({
+	            type: "POST",
+	            url: "/item/search/all",
+	            data: {
+	            	
+	            	field: "price"
+	            },
+	            dataType: "text",
+	            beforeSend: function (jqXHR, settings) {//스프링 시큐리티가 ajax post 호출시 막아서 추가.
+	                var header = $("meta[name='_csrf_header']").attr("content");
+	                var token = $("meta[name='_csrf']").attr("content");
+	                jqXHR.setRequestHeader(header, token);
+	     	}
+	        })
+	            .done(function (result) {
+	                console.log(result);
+	                $(".item_list_child").remove();
+	                $(".search_item").remove();
+	                $(".test").after(result);
+	                
+	               
+	            })
+	            .fail(function(jqXHR) {//오류메시지
+	                console.log(jqXHR);
+	            })
+	            .always(function() {
+	                console.log("요청, 응답 결과에 상관없이, 이건 항상 실행");
+	            })
+	    	}	
+    	if(category_id == 1){
+	        $.ajax({
+	            type: "POST",
+	            url: "/item/search",
+	            data: {
+	            	category_id: "1",
+	            	field: "price"
+	            },
+	            dataType: "text",
+	            beforeSend: function (jqXHR, settings) {//스프링 시큐리티가 ajax post 호출시 막아서 추가.
+	                var header = $("meta[name='_csrf_header']").attr("content");
+	                var token = $("meta[name='_csrf']").attr("content");
+	                jqXHR.setRequestHeader(header, token);
+	     	}
+	        })
+	            .done(function (result) {
+	                console.log(result);
+	                $(".item_list_child").remove();
+	                $(".search_item").remove();
+	                $(".test").after(result);
+	                
+	               
+	            })
+	            .fail(function(jqXHR) {//오류메시지
+	                console.log(jqXHR);
+	            })
+	            .always(function() {
+	                console.log("요청, 응답 결과에 상관없이, 이건 항상 실행");
+	            })
+	    	}	
+    	if(category_id == 2){
+	        $.ajax({
+	            type: "POST",
+	            url: "/item/search",
+	            data: {
+	            	category_id: "2",
+	            	field: "price"
+	            },
+	            dataType: "text",
+	            beforeSend: function (jqXHR, settings) {//스프링 시큐리티가 ajax post 호출시 막아서 추가.
+	                var header = $("meta[name='_csrf_header']").attr("content");
+	                var token = $("meta[name='_csrf']").attr("content");
+	                jqXHR.setRequestHeader(header, token);
+	     	}
+	        })
+	            .done(function (result) {
+	                console.log(result);
+	                $(".item_list_child").remove();
+	                $(".search_item").remove();
+	                $(".test").after(result);
+	                
+	               
+	            })
+	            .fail(function(jqXHR) {//오류메시지
+	                console.log(jqXHR);
+	            })
+	            .always(function() {
+	                console.log("요청, 응답 결과에 상관없이, 이건 항상 실행");
+	            })
+	    	}	
+    	if(category_id == 3){
+	        $.ajax({
+	            type: "POST",
+	            url: "/item/search",
+	            data: {
+	            	category_id: "3",
+	            	field: "price"
+	            },
+	            dataType: "text",
+	            beforeSend: function (jqXHR, settings) {//스프링 시큐리티가 ajax post 호출시 막아서 추가.
+	                var header = $("meta[name='_csrf_header']").attr("content");
+	                var token = $("meta[name='_csrf']").attr("content");
+	                jqXHR.setRequestHeader(header, token);
+	     	}
+	        })
+	            .done(function (result) {
+	                console.log(result);
+	                $(".item_list_child").remove();
+	                $(".search_item").remove();
+	                $(".test").after(result);
+	                
+	               
+	            })
+	            .fail(function(jqXHR) {//오류메시지
+	                console.log(jqXHR);
+	            })
+	            .always(function() {
+	                console.log("요청, 응답 결과에 상관없이, 이건 항상 실행");
+	            })
+	    	}
+    	
+    	
+    	}
+    function getItemListCategory_createDate() {
+    	
+    	if(category_id == 0){//0=전체
+	        $.ajax({
+	            type: "POST",
+	            url: "/item/search/all",
+	            data: {
+	            	
+	            	field: "createDate"
+	            },
+	            dataType: "text",
+	            beforeSend: function (jqXHR, settings) {//스프링 시큐리티가 ajax post 호출시 막아서 추가.
+	                var header = $("meta[name='_csrf_header']").attr("content");
+	                var token = $("meta[name='_csrf']").attr("content");
+	                jqXHR.setRequestHeader(header, token);
+	     	}
+	        })
+	            .done(function (result) {
+	                console.log(result);
+	                $(".item_list_child").remove();
+	                $(".search_item").remove();
+	                $(".test").after(result);
+	                
+	               
+	            })
+	            .fail(function(jqXHR) {//오류메시지
+	                console.log(jqXHR);
+	            })
+	            .always(function() {
+	                console.log("요청, 응답 결과에 상관없이, 이건 항상 실행");
+	            })
+	    	}	
+    	if(category_id == 1){
+	        $.ajax({
+	            type: "POST",
+	            url: "/item/search",
+	            data: {
+	            	category_id: "1",
+	            	field: "createDate"
+	            },
+	            dataType: "text",
+	            beforeSend: function (jqXHR, settings) {//스프링 시큐리티가 ajax post 호출시 막아서 추가.
+	                var header = $("meta[name='_csrf_header']").attr("content");
+	                var token = $("meta[name='_csrf']").attr("content");
+	                jqXHR.setRequestHeader(header, token);
+	     	}
+	        })
+	            .done(function (result) {
+	                console.log(result);
+	                $(".item_list_child").remove();
+	                $(".search_item").remove();
+	                $(".test").after(result);
+	                
+	               
+	            })
+	            .fail(function(jqXHR) {//오류메시지
+	                console.log(jqXHR);
+	            })
+	            .always(function() {
+	                console.log("요청, 응답 결과에 상관없이, 이건 항상 실행");
+	            })
+	    	}	
+    	if(category_id == 2){
+	        $.ajax({
+	            type: "POST",
+	            url: "/item/search",
+	            data: {
+	            	category_id: "2",
+	            	field: "createDate"
+	            },
+	            dataType: "text",
+	            beforeSend: function (jqXHR, settings) {//스프링 시큐리티가 ajax post 호출시 막아서 추가.
+	                var header = $("meta[name='_csrf_header']").attr("content");
+	                var token = $("meta[name='_csrf']").attr("content");
+	                jqXHR.setRequestHeader(header, token);
+	     	}
+	        })
+	            .done(function (result) {
+	                console.log(result);
+	                $(".item_list_child").remove();
+	                $(".search_item").remove();
+	                $(".test").after(result);
+	                
+	               
+	            })
+	            .fail(function(jqXHR) {//오류메시지
+	                console.log(jqXHR);
+	            })
+	            .always(function() {
+	                console.log("요청, 응답 결과에 상관없이, 이건 항상 실행");
+	            })
+	    	}	
+    	if(category_id == 3){
+	        $.ajax({
+	            type: "POST",
+	            url: "/item/search",
+	            data: {
+	            	category_id: "3",
+	            	field: "createDate"
+	            },
+	            dataType: "text",
+	            beforeSend: function (jqXHR, settings) {//스프링 시큐리티가 ajax post 호출시 막아서 추가.
+	                var header = $("meta[name='_csrf_header']").attr("content");
+	                var token = $("meta[name='_csrf']").attr("content");
+	                jqXHR.setRequestHeader(header, token);
+	     	}
+	        })
+	            .done(function (result) {
+	                console.log(result);
+	                $(".item_list_child").remove();
+	                $(".search_item").remove();
+	                $(".test").after(result);
+	                
+	               
+	            })
+	            .fail(function(jqXHR) {//오류메시지
+	                console.log(jqXHR);
+	            })
+	            .always(function() {
+	                console.log("요청, 응답 결과에 상관없이, 이건 항상 실행");
+	            })
+	    	}
+    	
+    	
+    	}
+/*AJAX 카테고리별 조회 끝*/
+    	
+    	
+
+
+
+</script>
+</html>

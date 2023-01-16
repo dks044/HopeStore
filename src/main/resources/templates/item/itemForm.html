@@ -1,0 +1,76 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" >
+	<!-- 대문 시작 -->
+	<div id="main_image" class="text-center" style="height: 400px; --bs-rows: 3; --bs-columns: 3;">
+		<div id="main_text">
+			상품등록하기
+		</div>
+	</div>
+	<!-- 대문 끝 -->
+	<div class="container my-6">
+		<form th:action="@{/item/create}" method="post" enctype="multipart/form-data">
+			<!-- 첨부파일을 넣기 위해선 enctype="multipart/form-data" 속성 추가해야함. -->
+			<!-- <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> -->
+			<br>
+			<div class="row justify-content-md-center">
+			  <div class="col col-lg-6">
+			  	<label for="name" class="form-label">상품이름</label>
+			    <!-- <input type="text" th:field="*{name}" class="form-control" placeholder="상품이름 입력"> -->
+			    <input type="text" name="name" class="form-control" placeholder="상품이름 입력">
+			  </div>
+			</div>
+			<br>
+			<div class="row justify-content-md-center">
+			  <div class="col col-lg-6">
+			  	<label for="text" class="form-label">상품내용 입력</label><br>
+			  	<!-- <textarea class="form-control" th:field="*{text}" aria-label="With textarea"></textarea> -->
+			  	<textarea class="form-control" name="text" aria-label="With textarea"></textarea>
+			  </div>
+			</div>
+			<br>
+			<div class="row justify-content-md-center">
+			  <div class="col col-lg-6">
+			  	<label for="file" class="form-label">썸네일 업로드</label><br>
+			  	<!-- <input type="file" th:field="*{file}" class="form-control" placeholder="상품이름 입력"> -->
+			  	<input type="file" name="file" class="form-control" placeholder="상품이름 입력">
+			  </div>
+			</div>
+			<br>
+			<div class="row justify-content-md-center">
+			  <div class="col col-lg-3">
+			  	<label for="price" class="form-label">가격 입력</label>
+			    <!-- <input type="text"  th:field="*{price}" class="form-control" placeholder="가격 입력"> -->
+			    <input type="text"  name="price" class="form-control" placeholder="가격 입력">
+			  </div>
+			  <div class="col col-lg-3">
+			  	<label for="stock" class="form-label">재고 입력</label>
+			    <!-- <input type="text"  th:field="*{stock}" class="form-control" placeholder="재고 입력"> -->
+			    <input type="text"  name="stock" class="form-control" placeholder="재고 입력">
+			  </div>
+			</div>
+			<br>
+			<div class="row justify-content-md-center">
+			  <div class="col col-lg-3">
+			  	<label for="isSoldOut" class="form-label">판매 여부</label><br>
+				<input type="radio" name="isSoldOut" value="0">판매중
+			  	<input type="radio" name="isSoldOut" value="1">품절
+			  </div>
+			  <div class="col col-lg-3">
+			  	<label for="file" class="form-label">카테고리</label><br>
+				<input type="radio" name="category" value="1">상의
+			  	<input type="radio" name="category" value="2">하의
+			  	<input type="radio" name="category" value="3">아우터
+			  </div>	
+			</div>
+			<br>
+			<div class="row justify-content-md-center">
+				<div class="col col-lg-6 text-center">
+					<button type="submit" class="btn btn-dark">상품등록하기</button>
+				</div>
+			</div>
+		</form>
+	</div>
+<br>
+<br>
+</div>
+</html>

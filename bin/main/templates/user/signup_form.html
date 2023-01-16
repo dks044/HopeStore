@@ -1,0 +1,131 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" >
+	<!-- 대문 시작 -->
+	<div id="signup_image" class="text-center" style="height: 400px; --bs-rows: 3; --bs-columns: 3;">
+		<div id="signup_text">
+			JOIN US
+		</div>
+	</div>
+	<!-- 대문 끝 -->
+	<!-- 회원가입폼 시작 -->
+	<div class="container my-6">
+		<br>
+		<form id="signupForm" th:action="@{/user/signup}" th:object="${userSignupForm}" method="post">
+			<h1 style="text-align: center;">회원정보 입력</h1>
+			<div th:replace="~{form_errors :: formErrorsFragment}"></div><!-- 폼 에러를 표시하는 공통 템플릿 -->
+			<br>
+			<div class="row justify-content-md-center">
+			  <div class="col col-lg-6">
+			  	<label for="username" class="form-label">사용자ID</label>
+			    <input type="text" th:field="*{username}" class="form-control" placeholder="사용자ID 입력">
+			  </div>
+			</div>
+			<br>
+			<div class="row justify-content-md-center">
+			  <div class="col col-lg-3">
+			  	<label for="password1" class="form-label">비밀번호</label>
+			    <input type="password" th:field="*{password1}" class="form-control" placeholder="비밀번호">
+			  </div>
+			  <div class="col col-lg-3">
+			  	<label for="password2" class="form-label">비밀번호 확인</label>
+			    <input type="password" th:field="*{password2}" class="form-control" placeholder="비밀번호 확인">
+			  </div>
+			</div>
+			<br>
+			<div class="row justify-content-md-center">
+			  <div class="col col-lg-6">
+			  	<label for="email" class="form-label">이메일</label>
+			    <input type="email" th:field="*{email}" class="form-control" placeholder="이메일 입력">
+			  </div>
+			</div>
+			<br>
+			<h5 style="text-align: center;">주소 입력</h5>
+			<div class="row justify-content-md-center">
+			  <div class="col col-lg-3">
+				<input class="form-control" th:field="*{postcode}" type="text" id="sample6_postcode" placeholder="우편번호" readonly>
+			  </div>
+			  <div class="col col-lg-3">
+			  	<!-- 카카오api를 활용한 주소검색버튼 -->
+			  	<input class="form-control" type="button" id="addressBtn_kakao" value="우편번호/주소 찾기">
+			  </div>
+			</div>
+			<br>
+			<div class="row justify-content-md-center">
+				<div class="col col-lg-6">
+					<input class="form-control" th:field="*{address}" type="text" id="address_kakao" placeholder="주소" readonly>
+				</div>
+			</div>
+			<br>
+			<div class="row justify-content-md-center">
+				<div class="col col-lg-6">
+					<input class="form-control" th:field="*{address_detail}" type="text" placeholder="상세주소">
+				</div>
+			</div>
+			<br>
+			<div class="row justify-content-md-center">
+				<div class="col col-lg-6">
+					<label for="phone_number" class="form-label">핸드폰번호 입력('-' 입력 안해도 됩니다.)</label>
+					<input class="form-control" th:field="*{phone_number}" id="phone_number" type="text" placeholder="핸드폰번호 입력"  maxlength="13">
+				</div>
+			</div>
+			<br>
+			<div class="row justify-content-md-center">
+				<div class="col col-lg-6 text-center">
+					<button id="signupForm_btn" type="submit" class="btn btn-dark">회원가입 하기</button>
+				</div>
+			</div>
+		</form>
+		<br>
+	</div>
+	<!-- 회원가입폼 끝 -->
+<script layout:fragment="script" type='text/javascript'>
+console.log("자바스크립트 실행확인");
+//카카오API사용(우편번호 찾기)
+window.onload = function(){
+    document.getElementById("addressBtn_kakao").addEventListener("click",function(){
+        new daum.Postcode({
+            oncomplete: function(data) { //선택시 입력값 세팅
+                document.getElementById("address_kakao").value = data.address; // 주소 넣기
+                document.getElementById('sample6_postcode').value = data.zonecode;
+                document.querySelector("input[name=address_detail]").focus(); //상세입력 포커싱
+            }
+        }).open();
+    });
+}
+//전화번호 입력시 하이폰 자동 출력
+function autoHypenPhone(str){
+            str = str.replace(/[^0-9]/g, '');
+            var tmp = '';
+            if( str.length < 4){
+                return str;
+            }else if(str.length < 7){
+                tmp += str.substr(0, 3);
+                tmp += '-';
+                tmp += str.substr(3);
+                return tmp;
+            }else if(str.length < 11){
+                tmp += str.substr(0, 3);
+                tmp += '-';
+                tmp += str.substr(3, 3);
+                tmp += '-';
+                tmp += str.substr(6);
+                return tmp;
+            }else{              
+                tmp += str.substr(0, 3);
+                tmp += '-';
+                tmp += str.substr(3, 4);
+                tmp += '-';
+                tmp += str.substr(7);
+                return tmp;
+            }
+            return str;
+        }
+
+var phone_number = document.getElementById('phone_number');
+phone_number.onkeyup = function(event){
+        event = event || window.event;
+        var _val = this.value.trim();
+        this.value = autoHypenPhone(_val) ;
+}
+</script>
+</html>

@@ -1,0 +1,16 @@
+
+			<div class="col search_item" th:each="item: ${search_itemList}">
+			 	<div class="card h-100">
+			 	<img th:data-uri="@{|item/detail/${item.id}|}" th:src="@{${item.filepath}}" class="itemImg card-img-top" alt="...">
+			   	<div class="card-body">
+			     	<a th:href="@{|item/detail/${item.id}|}" class="card-title" th:text="${item.name}"></a>
+			     	<p class="card-text" th:text="${item.text}"></p>
+			     	<h5 class="card-text" th:text="${#numbers.formatInteger(item.price, 3, 'COMMA') + '원'}"></h5>
+			     	<span th:if="${item.isSoldOut == 0 and item.stock > 0}" class="badge text-bg-success" th:text="판매중"></span>
+		     		<span th:if="${item.isSoldOut == 1 or item.stock == 0}" class="badge text-bg-danger" th:text="품절"></span>
+			   	</div>
+			 	</div>
+			</div>
+<script layout:fragment="script" type='text/javascript'>
+
+</script>

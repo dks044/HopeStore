@@ -1,0 +1,38 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" >
+	<br>
+	<br>
+	<br>
+	<br>
+	<div class="container text-center">
+	  <div class="row">
+	    <div class="col">
+	      <img th:src="@{${item.filepath}}">
+	    </div>
+	    <div id="itemDetail_section" class="col">
+	      <span id="item_name" th:text="${item.name}"></span>
+	      <span class="badge text-bg-light" th:text="${item.category.category_name}"></span>
+	      <hr>
+	      <h5 th:text="${#numbers.formatInteger(item.price, 3, 'COMMA') + '원'}"></h5>
+	      <p th:text="${item.text}"></p>
+	      <br>
+	      <span>
+	      	<button type="button" class="btn btn-outline-dark">ADD CART</button>&nbsp
+	      	<button type="button" class="btn btn-dark">Buy Now</button>
+	      </span>
+	      <br>
+	      <br>
+	      <br>
+	      <hr>
+	      <span class="badge text-bg-dark"><i class="fa-solid fa-eye"></i> <span th:text="${item.hit}"></span></span>
+	      <span class="badge text-bg-dark"><i class="fa-solid fa-money-bill-1-wave"></i> <span th:text="${item.order_count}"></span></span>
+	      <span class="badge text-bg-secondary" th:text="|재고: ${item.stock}|"></span>
+	      <span th:if="${item.isSoldOut == 0 and item.stock > 0}" class="badge text-bg-success" th:text="판매중"></span>
+	      <span th:if="${item.isSoldOut == 1 or item.stock == 0}" class="badge text-bg-danger" th:text="품절"></span>
+	    </div>
+	  </div>
+	</div>
+<br>
+<br>
+</div>
+</html>
