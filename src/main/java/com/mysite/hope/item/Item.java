@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.mysite.hope.cart.Cart;
+import com.mysite.hope.cartItem.CartItem;
 import com.mysite.hope.category.Category;
 
 import jakarta.persistence.CascadeType;
@@ -14,6 +16,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
@@ -53,9 +56,12 @@ public class Item {
 	private LocalDateTime createDate; //상품등록일
 	
 	private int hit; //조회수
-	private int order_count; //판매량
+	
+	private int sell_count; //판매량
 	
 	@ManyToOne
 	private Category category;
+	
+
 	
 }

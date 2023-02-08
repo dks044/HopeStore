@@ -1,0 +1,100 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" >
+	<!-- 대문 시작 -->
+	<div id="mypage_image" class="text-center" style="height: 400px; --bs-rows: 3; --bs-columns: 3;">
+		<div id="mypage_text">
+			운영자 페이지
+		</div>
+	</div>
+	<!-- 대문 끝 -->
+	<br><br>
+	<div class="container text-center">
+		<h1>주문목록</h1>
+		<span class="badge text-bg-dark" th:text="|${paging.getTotalElements} 개의 주문이 있습니다.|"></span>
+		<span class="badge text-bg-dark" th:text="|${depositBefore} 개의 주문이 입금전 입니다.|"></span>
+		<span class="badge text-bg-dark" th:text="|${depositAfter} 개의 주문이 입금완료 입니다.|"></span>
+		<table class="table">
+		  <thead>
+		    <tr>
+		      <th scope="col">주문번호</th>
+		      <th scope="col">주문계정</th>
+		      <th scope="col">배송수령인</th>
+		      <th scope="col">우편번호</th>
+		      <th scope="col">주소</th>
+		      <th scope="col">상세주소</th>
+		      <th scope="col">주문수량</th>
+		      <th scope="col">주문금액</th>
+		      <th scope="col">상품이름</th>
+		      <th scope="col">주문날짜</th>
+		      <th scope="col">입금상태</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <tr th:each="orderItem, loop : ${paging}">
+		      <th scope="row" th:text=${orderItem.id}>1</th>
+		      <td th:text=${orderItem.getOrder().getUser().getUsername()}></td>
+		      <td th:text=${orderItem.shipping_name}></td>
+		      <td th:text="${orderItem.postcode}"></td>
+		      <td th:text="${orderItem.address}"></td>
+		      <td th:text="${orderItem.address_detail}"></td>
+		      <td th:text="${orderItem.count}"></td>
+		      <td th:text="${#numbers.formatInteger(orderItem.price, 3, 'COMMA') + '원'}"></td>
+		      <td th:text="${orderItem.getItem().getName()}"></td>
+		      <td th:text="${#temporals.format(orderItem.orderDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+		      <td th:if="${orderItem.depositStatus == 1}">입금전
+		      	<span th:data-uri="@{|depositSuccess/${orderItem.id}|}" class="depositSuccess badge text-bg-primary">입금완료 처리하기</span>
+		      </td>
+		      <td th:if="${orderItem.depositStatus == 2}">입금확인</td>
+		    </tr>
+		  </tbody>
+		</table>
+	</div>
+	<!-- 페이징처리 시작 -->
+    <div th:if="${!paging.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item">
+                <a class="page-link" th:href="@{|?page=${paging.number*0}|}">
+                    <span>처음</span>
+                </a>
+            </li>
+            <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                <a class="page-link" th:href="@{|?page=${paging.number-1}|}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <!-- 페이지 리스트 루프 --><!-- 현재 페이지 기준으로 좌우 5개씩 보이도록 만든다. -->
+	        <!-- 루프내에 표시되는 페이지가 현재 페이지를 의미하는 paging.number 보다 5만큼 작거나 큰 경우에만 표시되도록 함 -->
+            <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+            	th:if="${page >= paging.number-5 and page <= paging.number+5}"
+                th:classappend="${page == paging.number} ? 'active'" 
+                class="page-item"> <!-- 현재 페이지와 같으면 active 적용 -->
+                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                <a class="page-link" th:href="@{|?page=${paging.number+1}|}">
+                    <span>다음</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" th:href="@{|?page=${paging.totalPages-1}|}">
+                    <span>마지막</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- 페이징처리 끝 -->
+</div>
+<script layout:fragment="script" type='text/javascript'>
+/*입금완료처리*/
+const depositSuccess = document.getElementsByClassName("depositSuccess");
+Array.from(depositSuccess).forEach(function(element){
+	element.addEventListener('click',function(){
+		if(confirm("입금완료 처리하시겠습니까?(꼭 확인 하고 처리해주세요!)")){
+        	location.href = this.dataset.uri;
+		}
+		
+    });
+});
+
+</script>
+</html>

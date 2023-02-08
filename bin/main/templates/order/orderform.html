@@ -1,0 +1,166 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" ><!-- 레이아웃 -->
+	<!-- 대문 시작 -->
+	<div id="order_image" class="text-center" style="height: 400px; --bs-rows: 3; --bs-columns: 3;">
+		<div id="order_text">
+			주문하기
+		</div>
+	</div>
+	<!-- 대문 끝 -->
+	<br><br>
+	<div class="container my-6"><!-- container my-6 -->
+		<h1 style="text-align: center;">주문정보 입력</h1>
+		<br><br>
+			<div class="row justify-content-md-center"><!-- section -->
+			  <div class="col col-lg-6" style="text-align: center;">
+			  	<span>
+			  		<h2 th:text="${item.name}" style="display: inline-block;"></h2>
+			  		<h5 th:text="${#numbers.formatInteger(item.price, 3, 'COMMA') + '원'}" style="display: inline-block;"></h5>
+			  		<span th:if="${item.isSoldOut == 0 and item.stock > 0}" class="badge text-bg-success" th:text="판매중"></span>
+			  		<span class="badge text-bg-light" th:text="${item.category.category_name}"></span>
+			  		<span class="badge text-bg-secondary" th:text="|재고: ${item.stock}|"></span>
+			  	</span>
+			  	<br>
+			  	<img th:src="@{${item.filepath}}">
+			  </div>
+			  <div class="col col-lg-6">
+			  		<!-- 주문등록 폼 --><!-- th:action="@{|/order/buy/${item.id}|}" -->
+			  		<form id="orderForm" th:action="@{|/order/buy/${item.id}|}" th:object="${ordersForm}" method="post">
+				  		<div th:replace="~{form_errors :: formErrorsFragment}"></div><!-- 폼 에러를 표시하는 공통 템플릿 -->
+<!-- 			  		<div class="row justify-content-md-center" th:if="${#fields.hasAnyErrors()}">
+			  			<div class="col col-lg-6" th:each="err : ${#fields.allErrors()}" th:text="${err}">
+			  			</div>
+			  		</div> --> 
+				  	<div class="row justify-content-md-center">
+				  		<div class="col col-lg-6">
+				  			<label>주문수량 입력</label>
+				  			<input id="countofOrder" type="number" class="form-control" th:field="*{count}" value="1">
+				  			<label>가격</label>
+				  			<input id="price" type="text" class="form-control" th:field="*{price}" value="${item.price}" readonly>
+				  		</div>
+				  		<div class="col col-lg-6">
+				  			<label>배송정보 입력</label>
+				  			<select class="form-select" onchange="addressOption(this)">
+							    <option selected>배송지</option>
+							    <option value="1">기본 회원정보의 주소 입력</option>
+							    <option value="2">새로 입력</option>
+							</select>
+				  			<input class="form-control" type="button" id="addressBtn_kakao" value="우편번호/주소 찾기">
+							<input th:field="*{postcode}" class="form-control" type="text" id="sample6_postcode" placeholder="우편번호">
+							<input th:field="*{address}" class="form-control" type="text" id="address_kakao" placeholder="주소" readonly>
+							<input th:field="*{address_detail}" class="form-control" type="text" id="addressDetail" placeholder="상세주소 입력">
+							<input th:field="*{shipping_name}" class="form-control" type="text" id="shipping_name" placeholder="배송 받을 분 성함 입력">
+				  		</div>
+					</div>
+					<br>
+					<div class="row justify-content-md-center">
+						<button id="orderFormSubmit" type="submit" class="btn btn-dark">주문하기</button>
+					</div>
+					</form> 
+					<!-- 주문등록 폼 -->
+			  </div>
+			</div><!-- section -->
+	</div><!-- container my-6 --><br><br>
+<input id="user_postcode" type="hidden" th:value="${user.postcode}">
+<input id="user_address" type="hidden" th:value="${user.address}">
+<input id="user_addressDetail" type="hidden" th:value="${user.address_detail}">
+<input type="hidden" id="item_price" th:value="${item.price}">
+</div><!-- 레이아웃 -->
+<script layout:fragment="script" type='text/javascript'>
+
+var user_postcode = document.getElementById("user_postcode");
+var user_address = document.getElementById("user_address");
+var user_addressDetail = document.getElementById("user_addressDetail");
+var price = document.getElementById("price");;
+var item_price = document.getElementById("item_price");
+
+var countofOrder = document.getElementById("countofOrder");
+countofOrder.addEventListener('click',function(){
+	var result;
+	result = countofOrder.value * item_price.value;
+	price.value = result;
+	
+    if(countofOrder.value <= 0){
+    	alert("0과 음수는 입력이 되지 않습니다.")
+    	countofOrder.value = 1;
+    	price.value = item_price.value;
+    }
+})
+
+//배송정보 입력옵션
+function addressOption(e){
+	if(e.value == 1){
+		console.log("1선택!");
+		document.getElementById("sample6_postcode").value = user_postcode.value;
+		document.getElementById("address_kakao").value = user_address.value;
+		document.getElementById("addressDetail").value = user_addressDetail.value;
+		
+	}
+	if(e.value == 2){
+		console.log("2선택!");
+		var blank = "";
+		document.getElementById("sample6_postcode").value = blank;
+		document.getElementById("address_kakao").value = blank;
+		document.getElementById("addressDetail").value = blank;
+	}
+}
+
+//카카오API주소입력
+window.onload = function(){
+    document.getElementById("addressBtn_kakao").addEventListener("click",function(){
+        new daum.Postcode({
+            oncomplete: function(data) { //선택시 입력값 세팅
+                document.getElementById("address_kakao").value = data.address; // 주소 넣기
+                document.getElementById('sample6_postcode').value = data.zonecode;
+                document.querySelector("input[name=address_detail]").focus(); //상세입력 포커싱
+            }
+        }).open();
+    });
+}
+/*===========================================================*/
+var sample6_postcode = document.getElementById("sample6_postcode");
+var address_kakao = document.getElementById("address_kakao");
+var addressDetail = document.getElementById("addressDetail");
+var shipping_name = document.getElementById("shipping_name");
+
+const orderForm = document.getElementById("orderForm");
+var orderFormSubmit = document.getElementById("orderFormSubmit");
+
+orderFormSubmit.addEventListener('click',function(e){
+	e.preventDefault();
+	var blank = "";
+	if(confirm("주문하시겠습니까?")){
+		if(price.value == blank){
+			alert("빈칸이 있는지 확인해주세요.");
+			return false;
+		}
+		if(countofOrder.value == blank){
+			alert("빈칸이 있는지 확인해주세요.");
+			return false;
+		}
+		if(sample6_postcode.value == blank){
+			alert("빈칸이 있는지 확인해주세요.");
+			return false;
+		}
+		if(address_kakao.value == blank){
+			alert("빈칸이 있는지 확인해주세요.");
+			return false;
+		}
+		if(addressDetail.value == blank){
+			alert("빈칸이 있는지 확인해주세요.");
+			return false;
+		}
+		if(shipping_name.value == blank){
+			alert("빈칸이 있는지 확인해주세요.");
+			return false;
+		}
+		document.getElementById("orderForm").submit();
+	}
+	
+})
+
+
+
+
+</script>
+</html>

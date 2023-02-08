@@ -8,7 +8,7 @@
 	</div>
 	<!-- 대문 끝 -->
 	<div class="container my-6">
-		<form th:action="@{/item/create}" method="post" enctype="multipart/form-data">
+		<form id="itemForm" th:action="@{/item/create}" method="post" enctype="multipart/form-data">
 			<!-- 첨부파일을 넣기 위해선 enctype="multipart/form-data" 속성 추가해야함. -->
 			<!-- <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> -->
 			<br>
@@ -16,7 +16,7 @@
 			  <div class="col col-lg-6">
 			  	<label for="name" class="form-label">상품이름</label>
 			    <!-- <input type="text" th:field="*{name}" class="form-control" placeholder="상품이름 입력"> -->
-			    <input type="text" name="name" class="form-control" placeholder="상품이름 입력">
+			    <input id="itemName" type="text" name="name" class="form-control" placeholder="상품이름 입력">
 			  </div>
 			</div>
 			<br>
@@ -32,7 +32,7 @@
 			  <div class="col col-lg-6">
 			  	<label for="file" class="form-label">썸네일 업로드</label><br>
 			  	<!-- <input type="file" th:field="*{file}" class="form-control" placeholder="상품이름 입력"> -->
-			  	<input type="file" name="file" class="form-control" placeholder="상품이름 입력">
+			  	<input id="itemFile" type="file" name="file" class="form-control" placeholder="상품이름 입력">
 			  </div>
 			</div>
 			<br>
@@ -40,19 +40,19 @@
 			  <div class="col col-lg-3">
 			  	<label for="price" class="form-label">가격 입력</label>
 			    <!-- <input type="text"  th:field="*{price}" class="form-control" placeholder="가격 입력"> -->
-			    <input type="text"  name="price" class="form-control" placeholder="가격 입력">
+			    <input id="itemPirce" type="text"  name="price" class="form-control" placeholder="가격 입력">
 			  </div>
 			  <div class="col col-lg-3">
 			  	<label for="stock" class="form-label">재고 입력</label>
 			    <!-- <input type="text"  th:field="*{stock}" class="form-control" placeholder="재고 입력"> -->
-			    <input type="text"  name="stock" class="form-control" placeholder="재고 입력">
+			    <input id="itemStock" type="text"  name="stock" class="form-control" placeholder="재고 입력">
 			  </div>
 			</div>
 			<br>
 			<div class="row justify-content-md-center">
 			  <div class="col col-lg-3">
 			  	<label for="isSoldOut" class="form-label">판매 여부</label><br>
-				<input type="radio" name="isSoldOut" value="0">판매중
+				<input type="radio" name="isSoldOut" value="0" checked="checked">판매중
 			  	<input type="radio" name="isSoldOut" value="1">품절
 			  </div>
 			  <div class="col col-lg-3">
@@ -65,7 +65,7 @@
 			<br>
 			<div class="row justify-content-md-center">
 				<div class="col col-lg-6 text-center">
-					<button type="submit" class="btn btn-dark">상품등록하기</button>
+					<button id="itemFormSubmitBtn" type="submit" class="btn btn-dark">상품등록하기</button>
 				</div>
 			</div>
 		</form>
@@ -73,4 +73,46 @@
 <br>
 <br>
 </div>
+<script layout:fragment="script" type='text/javascript'>
+const itemForm = document.getElementById("itemForm");
+const itemFormSubmitBtn = document.getElementById("itemFormSubmitBtn").
+addEventListener("click",function(e){
+	e.preventDefault();
+	var blank = "";
+	var chk_i = 0;
+	if(confirm("상품을 등록하시겠습니까?")){
+	   for(var i = 0; i < itemForm.category.length; i++) {
+           if(itemForm.category[i].checked == true) {
+        	   chk_i++;
+        	   break;
+           }
+       }
+	   if(chk_i<=0){
+		   alert("카테고리를 선택해주세요");
+		   return false;
+	   }
+	   
+	  if(document.getElementById("itemName").value == blank){
+		  alert("상품이름을 적어주세요!");
+          return false;
+	  }
+	  if(document.getElementById("itemFile").value == blank){
+		  alert("사진을 업로드해주세요!");
+          return false;
+	  }
+	  if(document.getElementById("itemPirce").value == ""){
+		  alert("가격을 적어주세요.")
+		  return false;
+	  }
+	  if(document.getElementById("itemStock").value == ""){
+		  alert("수량을 적어주세요.")
+		  return false;
+	  }
+	  
+	  itemForm.submit();
+	}
+	
+})
+
+</script>
 </html>

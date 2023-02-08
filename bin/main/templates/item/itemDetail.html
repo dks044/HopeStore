@@ -1,5 +1,6 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" >
+	<input id="itemID" type="hidden" th:value="${item.id}" >
 	<br>
 	<br>
 	<br>
@@ -12,20 +13,41 @@
 	    <div id="itemDetail_section" class="col">
 	      <span id="item_name" th:text="${item.name}"></span>
 	      <span class="badge text-bg-light" th:text="${item.category.category_name}"></span>
+	      <span sec:authorize="hasRole('ROLE_ADMIN')" id="itemDelete" th:data-uri="@{|delete/${item.id}|}" class="badge rounded-pill text-bg-danger"><i class="fa-solid fa-trash"></i></span>
+	      <span sec:authorize="hasRole('ROLE_ADMIN')" id="itemModify" th:data-uri="@{|modify/${item.id}|}" class="badge text-bg-info">상품수정하기</span>
+	      <span th:text="${equalsCartItem}" class="badge text-bg-danger"></span>
 	      <hr>
 	      <h5 th:text="${#numbers.formatInteger(item.price, 3, 'COMMA') + '원'}"></h5>
 	      <p th:text="${item.text}"></p>
 	      <br>
-	      <span>
-	      	<button type="button" class="btn btn-outline-dark">ADD CART</button>&nbsp
-	      	<button type="button" class="btn btn-dark">Buy Now</button>
-	      </span>
+	      	<!-- 카트담기 폼 -->
+	      	<form th:action="@{|/cart/add/${item.id}|}" method="post">
+		      	<div class="row justify-content-md-center">
+				  	<label>카트담기</label>
+				  	<br>
+				  <div class="col col-lg-3">
+				    <input id="countofCart" type="number" class="form-control" name="count" value="1">
+				  </div>
+				  <div class="col col-lg-3">
+					<button type="submit" id="cartSubmit" class="btn btn-outline-dark">ADD CART</button>
+				  </div>
+				</div>	
+	      	</form>
+	      	<br>
+	      	<hr id="hr">
+	      	<form th:action="@{|/order/${item.id}|}" method="get">
+		      	<div class="row justify-content-md-center">
+		      		<div class="col col-lg-3">
+						<button type="submit" class="btn btn-dark">Buy Now</button>
+		      		</div>
+				</div>	
+	      	</form>
 	      <br>
 	      <br>
 	      <br>
 	      <hr>
 	      <span class="badge text-bg-dark"><i class="fa-solid fa-eye"></i> <span th:text="${item.hit}"></span></span>
-	      <span class="badge text-bg-dark"><i class="fa-solid fa-money-bill-1-wave"></i> <span th:text="${item.order_count}"></span></span>
+	      <span class="badge text-bg-dark"><i class="fa-solid fa-money-bill-1-wave"></i> <span th:text="${item.sell_count}"></span></span>
 	      <span class="badge text-bg-secondary" th:text="|재고: ${item.stock}|"></span>
 	      <span th:if="${item.isSoldOut == 0 and item.stock > 0}" class="badge text-bg-success" th:text="판매중"></span>
 	      <span th:if="${item.isSoldOut == 1 or item.stock == 0}" class="badge text-bg-danger" th:text="품절"></span>
@@ -35,4 +57,94 @@
 <br>
 <br>
 </div>
+<script layout:fragment="script" type='text/javascript'>
+//주문수량에 0이하의 값을 입력하면 다시 1로 처리.
+var countofCart = document.getElementById("countofCart");
+countofCart.addEventListener('click',function(){
+    if(countofCart.value <= 0){
+    	alert("0과 음수는 입력이 되지 않습니다.")
+    	countofCart.value = 1;
+    }
+})
+const itemDelete = document.getElementById("itemDelete").
+addEventListener("click",function(){
+	if(confirm("상품을 삭제하시겠습니까? (회원이 주문을했거나, 카트에 담긴 상품은 삭제되지 않습니다.)")){
+		location.href = this.dataset.uri;
+	}
+	
+})
+const itemModify = document.getElementById("itemModify").
+addEventListener("click",function(){
+	if(confirm("상품을 수정하시겠습니까?")){
+		location.href = this.dataset.uri;
+	}
+})
+
+
+
+
+
+/* function addCart2(){
+ var paramData = {
+	id : $("#itemID").val()	 
+ };
+ var param = JSON.stringify(paramData);
+ var url = "/cart/add";
+ 
+	$.ajax({
+        url : url,
+        type : "POST",
+        contentType: "application/json",
+        data : param,
+        beforeSend: function (jqXHR, settings) {//스프링 시큐리티가 ajax post 호출시 막아서 추가.
+            var header = $("meta[name='_csrf_header']").attr("content");
+            var token = $("meta[name='_csrf']").attr("content");
+            jqXHR.setRequestHeader(header, token);
+ 	    },
+        dataType: "json",
+        cache: false,
+        success : function (result,status) {
+        	 
+             $(".test").after(result);
+        },
+        error : function (jqXHR) {
+        	console.log(jqXHR);
+        }
+    });
+ }  */
+
+
+/* function addCart() {
+    $.ajax({
+        type: "Post",
+        url: "/cart/add",
+        data:{
+        	id : id
+        },
+        contentType: "application/json",
+        dataType: "json",
+        beforeSend: function (jqXHR, settings) {//스프링 시큐리티가 ajax post 호출시 막아서 추가.
+            var header = $("meta[name='_csrf_header']").attr("content");
+            var token = $("meta[name='_csrf']").attr("content");
+            jqXHR.setRequestHeader(header, token);
+ 	}
+    })
+        .success(function (result) {
+            console.log(result);
+            $(".test").after(result);
+            
+           
+        })
+        .error(function(jqXHR) {//오류메시지
+            console.log(jqXHR);
+        })
+        .always(function() {
+            console.log("요청, 응답 결과에 상관없이, 이건 항상 실행");
+        })
+} */
+
+	
+	 
+
+</script>
 </html>

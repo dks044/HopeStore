@@ -22,7 +22,7 @@ public class ItemService {
 	private final ItemRepository itemRepository;
 	private final CategoryRepository categoryRepository;
 	
-	// 상품 등록
+	// 상품 등록(파일)
     public void saveItem(Item item, MultipartFile file) throws Exception {
 
         String orifileName = file.getOriginalFilename();
@@ -48,12 +48,25 @@ public class ItemService {
         itemRepository.save(item);
         
     }
+    //상품 수정
+    public void modify(Item item,String name,String text,int price, int stock, int isSoldOut,Category category) {
+    	item.setName(name);
+    	item.setText(text);
+    	item.setPrice(price);
+    	item.setStock(stock);
+    	item.setIsSoldOut(isSoldOut);
+    	item.setCategory(category);
+    	this.itemRepository.save(item);
+    	
+    }
+    
     
     //id값으로 상품(item) 조회
     public Item getItem(int id) {
     	Item item = this.itemRepository.findAllById(id);
     	return item;
     }
+    
     //상품페이지 이동시 해당 상품 조회수 올리기
     public void hitAddItem(Item item) {
     	int hit_cnt = item.getHit();
@@ -62,12 +75,16 @@ public class ItemService {
     	this.itemRepository.save(item);
     }
     
+    
     public List<Item> getCategoryByItemList(Integer id,String field){
     	Optional<Category> category = this.categoryRepository.findById(id);
     	
     	return this.itemRepository.findAllByCategory(category.get(),Sort.by(Sort.Direction.DESC,field));
     }
     
+    public void delete(Item item) {
+    	this.itemRepository.delete(item);
+    }
     
     
 	

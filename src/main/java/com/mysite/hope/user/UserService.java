@@ -1,10 +1,15 @@
 package com.mysite.hope.user;
 
+import java.util.Optional;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.mysite.hope.cart.Cart;
+import com.mysite.hope.cart.CartRepository;
+import com.mysite.hope.order.Order;
+import com.mysite.hope.order.OrderRepository;
 import com.mysite.hope.user.UserRepository;
-
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -12,8 +17,9 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 	private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-	
-
+	private final OrderRepository orderRepository;
+	private final CartRepository cartRepository;
+    
     
     //회원생성
     public SiteUser create(	   
@@ -39,6 +45,38 @@ public class UserService {
     	this.userRepository.save(user);
     	return user;
     }
+    public Optional<SiteUser> getByUserName(String username) {
+    	Optional<SiteUser> user = this.userRepository.findByusername(username);
+    	if(user.isPresent()) {
+    		return user;
+    	}else {
+    		throw new com.mysite.hope.DataNotFoundException("SiteUser Not found");
+    	}
+    }
     
+    //삭제할떄 order와 cart에서도 다 삭제되게
+    //memo: 그냥 회원탈퇴 .delete 메서드를 사용하면 안되고, 관련된 엔티티에 있는 컬럼도 제거해야 하는 중요한걸 배웠다..
+    public void deleteMember(SiteUser user) {
+    	
+    	Order order = this.orderRepository.findAllByUser(user);
+    	this.orderRepository.delete(order);
+    	Cart cart = this.cartRepository.findAllByUser(user);
+    	this.cartRepository.delete(cart);
+    	
+    	if(order == null) {
+    		this.userRepository.delete(user);
+    	}
+    	if(cart == null) {
+    		this.userRepository.delete(user);
+    	}
+    	if(cart == null || order == null) {
+    		this.userRepository.delete(user);
+    	}
+    	if(cart == null && order == null) {
+    		this.userRepository.delete(user);
+    	}
+    	
+    	this.userRepository.delete(user);
+    }
     
 }
