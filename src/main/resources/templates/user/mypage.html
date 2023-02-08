@@ -1,5 +1,101 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" >
-
+	<!-- 대문 시작 -->
+	<div id="mypage_image" class="text-center" style="height: 400px; --bs-rows: 3; --bs-columns: 3;">
+		<div id="mypage_text">
+			마이 페이지
+		</div>
+	</div>
+	<!-- 대문 끝 -->
+	<br><br>
+	<div class="container text-center">
+		<div class="row justify-content-md-center">
+			<div class="col col-lg-12">
+				<h3><i class="fa-regular fa-money-bill-1"></i> ORDER</h3>
+				<span class="badge text-bg-dark" th:if="${not #lists.isEmpty(orderItemList)}" th:text="|총주문금액 : ${#numbers.formatInteger(orderTotalPrice, 3, 'COMMA') + '원'}|"></span>
+				<div class="row justify-content-md-center" th:if="${not #lists.isEmpty(orderItemList)}">
+					<div class="col col-lg-12" th:each="orderItem : ${orderItemList}">
+						<table class="table">
+							<tbody>
+								<tr>
+									<th th:text="${orderItem.id}" scope="row"></th>
+								    <td th:text="|주문수량 : ${orderItem.count}|"></td>
+								    <td th:text="${#numbers.formatInteger(orderItem.price, 3, 'COMMA') + '원'}"></td>
+								    <td th:text="|우편번호 : ${orderItem.postcode}|"></td>
+								    <td th:text="${orderItem.address}"></td>
+								    <td th:text="|상세주소 : ${orderItem.address_detail}|"></td>
+								    <td th:text="|배송수령인 : ${orderItem.shipping_name}|"></td>
+								    <td class="orderitemLink" th:if="${not #strings.isEmpty(orderItem.getItem())}" th:data-uri="@{|item/detail/${orderItem.getItem().getId()}|}" th:text="|상품이름 : ${orderItem.getItem().getName()}|"></td>
+								    <td th:if="${orderItem.depositStatus == 1}" th:text="입금전"></td>
+								    <td th:if="${orderItem.depositStatus == 2}" th:text="입금확인"></td>
+								    <td class="deleteOrderItem" th:data-uri="@{|delete/orderItem/${orderItem.getId()}|}"><span class="badge text-bg-danger"><i class="fa-solid fa-trash"></i></span></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col col-lg-12">
+				<h3><i class="fa-solid fa-cart-shopping"></i> CART</h3>
+				<div class="row justify-content-md-center" th:if="${not #lists.isEmpty(cartItemList)}">
+						<div class="card h-100" style="width: 18rem;" th:each="cartItem : ${cartItemList}">
+						  <img th:src="@{${cartItem.getItem().getFilepath()}}" class="card-img-top" alt="...">
+						  <div class="card-body">
+						    <span>
+						    	<!-- <h4 th:text="${cartItem.id}" style="display: inline-block;"></h4> 카트번호-->
+						    	<h5 th:data-uri="@{|item/detail/${cartItem.getItem().getId()}|}" th:text="${cartItem.getItem().getName()}" class="cartitemLink card-title" style="display: inline-block;"></h5>
+						    	<span th:data-uri="@{|delete/cartItem/${cartItem.getId()}|}" class="deleteCartItem badge text-bg-danger"><i class="fa-solid fa-trash"></i></span>
+						    </span> 
+						    <p class="card-text" th:text="|수량 : ${cartItem.count}|"></p>
+						    <p class="card-text" th:text="${#numbers.formatInteger(cartItem.getItem().getPrice() * cartItem.count, 3, 'COMMA') + '원'}"></p>
+						  </div>
+						</div>
+				</div>
+			</div>
+		</div>
+		<br><br><br>
+		<button th:data-uri="@{mypage/delete}" id="deleteMember" type="button" class="btn btn-danger">회원 탈퇴하기</button>
+	</div>
 </div>
+<script layout:fragment="script" type='text/javascript'>
+/*주문상품 링크 이동및 삭제*/
+const orderitemLink = document.getElementsByClassName("orderitemLink");
+Array.from(orderitemLink).forEach(function(element){
+	element.addEventListener('click',function(){
+        location.href = this.dataset.uri;
+    });
+});
+const deleteOrderItem = document.getElementsByClassName("deleteOrderItem");
+Array.from(deleteOrderItem).forEach(function(element) {
+    element.addEventListener('click', function() {
+        if(confirm("주문을 취소하시겠습니까?")) {
+            location.href = this.dataset.uri;
+        };
+    });
+}); 
+
+/*카트아이템 링크 이동및 삭제*/
+const cartitemLink = document.getElementsByClassName("cartitemLink");
+Array.from(cartitemLink).forEach(function(element){
+	element.addEventListener('click',function(){
+        location.href = this.dataset.uri;
+    });
+});
+const deleteCartItem = document.getElementsByClassName("deleteCartItem");
+Array.from(deleteCartItem).forEach(function(element) {
+    element.addEventListener('click', function() {
+        if(confirm("카트에 담긴 상품을 제거하시겠습니까?")) {
+            location.href = this.dataset.uri;
+        };
+    });
+});
+const deleteMember = document.getElementById("deleteMember").
+addEventListener("click",function(){
+	if(confirm("정말로 탈퇴하시겠습니까?")){
+		location.href = this.dataset.uri;
+	}
+})
+
+
+</script>
 </html>

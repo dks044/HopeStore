@@ -17,6 +17,9 @@
                 <li class="nav-item">
                     <a class="nav-link" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/item/create}">상품올리기</a>
                 </li>
+                <li class="nav-item">
+					<a class="nav-link" href="https://open.kakao.com/o/s7Okib3e" target="_blank">문의하기 </a>
+                </li>
             </ul>
             <div>
             	<ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -25,9 +28,11 @@
 	                </li>
             		<li class="nav-item justify-content-end">
         				<a class="nav-link" sec:authorize="hasRole('ROLE_USER')" th:href="@{/user/mypage}">My Page</a>
+        				<a class="nav-link" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/user/adminPage}">Admin Page</a>
         			</li> 
             	</ul>
             </div>
         </div>
     </div>
+
 </nav>

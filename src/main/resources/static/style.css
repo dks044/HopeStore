@@ -34,6 +34,7 @@ body {
 .itemImg:hover {
 	cursor:pointer;
 }
+
 #item{
 	box-shadow: 3px 5px 5px black;
 	transition: all 1s;
@@ -94,11 +95,59 @@ body {
 #itemList_text{
 	font-size: 100px;
 }
-
+.itemImg2:hover {/*ajax로 호출되는 상품들에 대한*/
+	cursor:pointer;
+}
 /*상품리스트 페이지 끝*/
+/*주문페이지 시작*/
+#order_image{
+	background-image: url("https://cdn.pixabay.com/photo/2016/09/13/19/31/texture-1668079_1280.jpg");
+	background-size: cover;
+	padding-top: 100px
+}
+#order_text{
+	font-size: 100px;
+}
+#hr{
+	text-align: center;
+	width: 30%;
+	margin-left: auto;
+	margin-right: auto;
+}
+/*주문페이지 끝*/
+/*주문 성공 페이지 시작*/
+/*주문 성공 페이지 끝*/
+/*마이페이지 시작*/
+#mypage_image{
+	background-image: url("https://cdn.pixabay.com/photo/2017/06/15/23/47/painting-2407262_1280.jpg");
+	background-size: cover;
+	padding-top: 100px
+}
+#mypage_text{
+	font-size: 100px;
+}
 
-
-
+.orderitemLink{
+	color:red;
+}
+.orderitemLink:hover{
+	cursor:pointer;
+	color:blue;
+}
+.cartitemLink{
+	color:red;
+}
+.cartitemLink:hover{
+	cursor:pointer;
+	color:blue;
+}
+.deleteOrderItem:hover{
+	cursor:pointer;
+}
+.deleteCartItem:hover{
+	cursor:pointer;
+}
+/*마이페이지 끝*/
 
 
 

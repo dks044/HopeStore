@@ -1,7 +1,7 @@
 
 			<div class="col search_item" th:each="item: ${search_itemList}">
 			 	<div class="card h-100">
-			 	<img th:data-uri="@{|item/detail/${item.id}|}" th:src="@{${item.filepath}}" class="itemImg card-img-top" alt="...">
+			 	<img th:data-uri="@{|item/detail/${item.id}|}" th:src="@{${item.filepath}}" class="itemImg2 card-img-top" alt="...">
 			   	<div class="card-body">
 			     	<a th:href="@{|item/detail/${item.id}|}" class="card-title" th:text="${item.name}"></a>
 			     	<p class="card-text" th:text="${item.text}"></p>
@@ -12,5 +12,11 @@
 			 	</div>
 			</div>
 <script layout:fragment="script" type='text/javascript'>
-
+//ajax 호출시 img파일도 링크가 되게
+const itemImg2 = document.getElementsByClassName("itemImg2");
+Array.from(itemImg2).forEach(function(element){
+	element.addEventListener('click',function(){
+        location.href = this.dataset.uri;
+    });
+});
 </script>

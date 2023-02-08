@@ -16,8 +16,7 @@
 	  <hr>
 	  <br>
 	  <!-- 상품반복 시작 (최신순) -->
-	  <div class="row row-cols-1 row-cols-md-4 g-4">
-	  	  <!-- 3개만 표시되게 -->
+	  <div class="row row-cols-1 row-cols-md-4 g-4" th:if="${#lists.size(itemList_letest) > 0}">
 		  <div class="col" th:each="item,index : ${itemList_letest}" th:if="${index.index} < 3">
 		    <div id="item" class="card h-100">
 		    <img th:data-uri="@{|item/detail/${item.id}|}" th:src="@{${item.filepath}}" class="itemImg card-img-top" alt="...">
@@ -32,11 +31,10 @@
 		  </div>
 		  <div class="col">
 			<a id="moreItem_btn" th:href="@{/item/itemList}" class="btn btn-outline-dark">더 둘러보기</a>
-		  </div>
-  	  </div>
+		  </div> 
+	  </div>
 	  <!-- 상품반복 끝 (최신순) -->
 	  <br>
-  	  <br>
   	  <br>
   	  <br>
   	  <br>
@@ -45,8 +43,7 @@
   	  <hr>
   	  <br>
   	  <!-- 상품반복 시작 (조회순) -->
-  	  <div class="row row-cols-1 row-cols-md-4 g-4">
-	  	  <!-- 3개만 표시되게 -->
+  	  <div class="row row-cols-1 row-cols-md-4 g-4" th:if="${#lists.size(itemList_hit) > 0}">
 			  <div class="col" th:each="item,index : ${itemList_hit}" th:if="${index.index} < 3">
 			    <div id="item" class="card h-100">
 			    <img th:data-uri="@{|item/detail/${item.id}|}" th:src="@{${item.filepath}}" class="itemImg card-img-top" alt="...">
@@ -62,11 +59,12 @@
 			  <div class="col">
 				<a id="moreItem_btn" th:href="@{/item/itemList}" class="btn btn-outline-dark">더 둘러보기</a>
 			  </div>
-  	  </div>
+  	  </div> 
 	  <!-- 상품반복 끝 (조회순) -->
 	</div>
 	<br>
 	<br>
+	</div> 
 </div>
 <script layout:fragment="script" type='text/javascript'>
 /*상품이미지 클릭시 상품페이지 이동*/
