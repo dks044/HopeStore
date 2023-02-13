@@ -18,7 +18,7 @@
 		<button id="category_outer" th:value="3" type="button" class="btn btn-outline-dark" onclick="getItemListOuter()">아우터</button><br><br>
 		<button type="button" class="btn btn-outline-success" onclick="getItemListCategory_price()">가격순</button>
 		<!-- 나중에 주문순도 구현 -->
-		<button type="button" class="btn btn-outline-success">주문순</button>
+		<!-- <!-- <button type="button" class="btn btn-outline-success" onclick="getItemListCategory_sellCount()" >주문순</button> -->
 		<button type="button" class="btn btn-outline-success" onclick="getItemListCategory_createDate()">최신순</button>
 		<br>
 		<div class="row row-cols-1 row-cols-md-6 g-4 item_list_parent">
@@ -425,6 +425,131 @@ const category_all = document.getElementById("category_all")
 	            data: {
 	            	category_id: "3",
 	            	field: "createDate"
+	            },
+	            dataType: "text",
+	            beforeSend: function (jqXHR, settings) {//스프링 시큐리티가 ajax post 호출시 막아서 추가.
+	                var header = $("meta[name='_csrf_header']").attr("content");
+	                var token = $("meta[name='_csrf']").attr("content");
+	                jqXHR.setRequestHeader(header, token);
+	     	}
+	        })
+	            .done(function (result) {
+	                console.log(result);
+	                $(".item_list_child").remove();
+	                $(".search_item").remove();
+	                $(".test").after(result);
+	                
+	               
+	            })
+	            .fail(function(jqXHR) {//오류메시지
+	                console.log(jqXHR);
+	            })
+	            .always(function() {
+	                console.log("요청, 응답 결과에 상관없이, 이건 항상 실행");
+	            })
+	    	}
+    	
+    	
+    	}
+    function getItemListCategory_sellCount() { //판매순
+    	
+    	if(category_id == 0){//0=전체
+	        $.ajax({
+	            type: "POST",
+	            url: "/item/search/all",
+	            data: {
+	            	
+	            	field: "sell_count"
+	            },
+	            dataType: "text",
+	            beforeSend: function (jqXHR, settings) {//스프링 시큐리티가 ajax post 호출시 막아서 추가.
+	                var header = $("meta[name='_csrf_header']").attr("content");
+	                var token = $("meta[name='_csrf']").attr("content");
+	                jqXHR.setRequestHeader(header, token);
+	     	}
+	        })
+	            .done(function (result) {
+	                console.log(result);
+	                $(".item_list_child").remove();
+	                $(".search_item").remove();
+	                $(".test").after(result);
+	                
+	               
+	            })
+	            .fail(function(jqXHR) {//오류메시지
+	                console.log(jqXHR);
+	            })
+	            .always(function() {
+	                console.log("요청, 응답 결과에 상관없이, 이건 항상 실행");
+	            })
+	    	}	
+    	if(category_id == 1){
+	        $.ajax({
+	            type: "POST",
+	            url: "/item/search",
+	            data: {
+	            	category_id: "1",
+	            	field: "sell_count"
+	            },
+	            dataType: "text",
+	            beforeSend: function (jqXHR, settings) {//스프링 시큐리티가 ajax post 호출시 막아서 추가.
+	                var header = $("meta[name='_csrf_header']").attr("content");
+	                var token = $("meta[name='_csrf']").attr("content");
+	                jqXHR.setRequestHeader(header, token);
+	     	}
+	        })
+	            .done(function (result) {
+	                console.log(result);
+	                $(".item_list_child").remove();
+	                $(".search_item").remove();
+	                $(".test").after(result);
+	                
+	               
+	            })
+	            .fail(function(jqXHR) {//오류메시지
+	                console.log(jqXHR);
+	            })
+	            .always(function() {
+	                console.log("요청, 응답 결과에 상관없이, 이건 항상 실행");
+	            })
+	    	}	
+    	if(category_id == 2){
+	        $.ajax({
+	            type: "POST",
+	            url: "/item/search",
+	            data: {
+	            	category_id: "2",
+	            	field: "sell_count"
+	            },
+	            dataType: "text",
+	            beforeSend: function (jqXHR, settings) {//스프링 시큐리티가 ajax post 호출시 막아서 추가.
+	                var header = $("meta[name='_csrf_header']").attr("content");
+	                var token = $("meta[name='_csrf']").attr("content");
+	                jqXHR.setRequestHeader(header, token);
+	     	}
+	        })
+	            .done(function (result) {
+	                console.log(result);
+	                $(".item_list_child").remove();
+	                $(".search_item").remove();
+	                $(".test").after(result);
+	                
+	               
+	            })
+	            .fail(function(jqXHR) {//오류메시지
+	                console.log(jqXHR);
+	            })
+	            .always(function() {
+	                console.log("요청, 응답 결과에 상관없이, 이건 항상 실행");
+	            })
+	    	}	
+    	if(category_id == 3){
+	        $.ajax({
+	            type: "POST",
+	            url: "/item/search",
+	            data: {
+	            	category_id: "3",
+	            	field: "sell_count"
 	            },
 	            dataType: "text",
 	            beforeSend: function (jqXHR, settings) {//스프링 시큐리티가 ajax post 호출시 막아서 추가.
