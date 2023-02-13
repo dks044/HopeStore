@@ -38,7 +38,7 @@
 	      	<form th:action="@{|/order/${item.id}|}" method="get">
 		      	<div class="row justify-content-md-center">
 		      		<div class="col col-lg-3">
-						<button type="submit" class="btn btn-dark">Buy Now</button>
+						<button th:if="${item.isSoldOut == 0 and item.stock > 0}" type="submit" class="btn btn-dark">Buy Now</button>
 		      		</div>
 				</div>	
 	      	</form>
